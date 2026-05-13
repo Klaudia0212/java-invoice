@@ -8,10 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pl.edu.agh.mwo.invoice.Invoice;
-import pl.edu.agh.mwo.invoice.product.DairyProduct;
-import pl.edu.agh.mwo.invoice.product.OtherProduct;
-import pl.edu.agh.mwo.invoice.product.Product;
-import pl.edu.agh.mwo.invoice.product.TaxFreeProduct;
+import pl.edu.agh.mwo.invoice.product.*;
 
 public class InvoiceTest {
     private Invoice invoice;
@@ -179,4 +176,25 @@ public class InvoiceTest {
         Assert.assertTrue(productList.contains("Chleb, 3, 5.00"));
         Assert.assertTrue(productList.contains("Liczba pozycji: 1"));
     }
+
+    @Test
+    public void testInvoiceTaxTotalIncludesExciseForBottleOfWine() {
+        invoice.addProduct(new BottleOfWine("Wino", new BigDecimal("100.00")));
+
+        Assert.assertThat(
+                new BigDecimal("28.56"),
+                Matchers.comparesEqualTo(invoice.getTaxTotal())
+        );
+    }
+
+    @Test
+    public void testInvoiceTaxTotalIncludesExciseForManyBottlesOfWine() {
+        invoice.addProduct(new BottleOfWine("Wino", new BigDecimal("100.00")), 2);
+
+        Assert.assertThat(
+                new BigDecimal("57.12"),
+                Matchers.comparesEqualTo(invoice.getTaxTotal())
+        );
+    }
+
 }
