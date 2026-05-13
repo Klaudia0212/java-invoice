@@ -138,4 +138,32 @@ public class InvoiceTest {
         Invoice invoice2 = new Invoice();
         Assert.assertNotEquals(invoice1.getNumber(), invoice2.getNumber());
     }
+
+    @Test
+    public void testInvoiceProductListContainsOneProduct() {
+        Product bread = new TaxFreeProduct("Chleb", new BigDecimal("5.00"));
+
+        invoice.addProduct(bread, 2);
+
+        String productList = invoice.getProductList();
+
+        Assert.assertTrue(productList.contains("Chleb"));
+        Assert.assertTrue(productList.contains("2"));
+        Assert.assertTrue(productList.contains("5.00"));
+        Assert.assertTrue(productList.contains("Liczba pozycji: 1"));
+    }
+
+    @Test
+    public void testInvoiceProductListContainsManyProducts() {
+        invoice.addProduct(new TaxFreeProduct("Chleb", new BigDecimal("5.00")), 2);
+        invoice.addProduct(new DairyProduct("Maslo", new BigDecimal("10.00")), 1);
+        invoice.addProduct(new OtherProduct("Kubek", new BigDecimal("15.00")), 3);
+
+        String productList = invoice.getProductList();
+
+        Assert.assertTrue(productList.contains("Chleb"));
+        Assert.assertTrue(productList.contains("Maslo"));
+        Assert.assertTrue(productList.contains("Kubek"));
+        Assert.assertTrue(productList.contains("Liczba pozycji: 3"));
+    }
 }

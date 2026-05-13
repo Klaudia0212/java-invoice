@@ -46,4 +46,23 @@ public class Invoice {
     public int getNumber() {
         return new Random().nextInt(1000000);
     }
+
+    public String getProductList() {
+        StringBuilder result = new StringBuilder();
+
+        result.append("Numer faktury: ").append(getNumber()).append("\n");
+
+        for (Product product : products.keySet()) {
+            result.append(product.getName())
+                    .append(", ")
+                    .append(products.get(product))
+                    .append(", ")
+                    .append(product.getPrice())
+                    .append("\n");
+        }
+
+        result.append("Liczba pozycji: ").append(products.size());
+
+        return result.toString();
+    }
 }
